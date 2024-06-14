@@ -29,7 +29,7 @@ class GameMechs
     public:
         GameMechs();
         GameMechs(int boardX, int boardY);
-        
+        //~GameMechs(); //Destructor, may be needed
         bool getExitFlagStatus();
         void setExitTrue();
 
@@ -39,6 +39,7 @@ class GameMechs
 
         int getBoardSizeX();
         int getBoardSizeY();
+        //need to add more functions
       
 
 };
