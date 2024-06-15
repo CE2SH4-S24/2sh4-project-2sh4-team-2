@@ -1,0 +1,22 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "2SH4 PPA3", // can be anything -- just a tag
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/Project.exe",
+            "args": [],
+            "stopAtEntry": true,    // can be set to flse but wont stop at the main
+            "cwd": "${fileDirname}",
+            "environment": [],
+            "externalConsole": true,    // true if you want a terminal to see the printf stuff
+            "MIMode": "gdb",
+            //"preLaunchTask": "build",  // Ensures build task runs before debugging
+
+        } 
+    ]
+}

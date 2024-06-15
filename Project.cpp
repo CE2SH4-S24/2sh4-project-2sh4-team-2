@@ -13,6 +13,7 @@ using namespace std;
 //objPos myPos;
 Player* myPlayer;
 objPos border;
+Food* myFood;
 
 
 //bool exitFlag;
@@ -58,6 +59,8 @@ void Initialize(void)
     myPlayer = new Player(myGM);
     //myPos.setObjPos(2, 3, '@');
     border.setObjPos(0,0, '#');
+    
+    myFood = new Food(myPlayer, myGM);
 
 }
 
@@ -77,27 +80,37 @@ void RunLogic(void)
 
 void DrawScreen(void)
 {
-    objPos tempPos;
-    myPlayer->getPlayerPos(tempPos);
+    objPos tempPlayerPos;
+    myPlayer->getPlayerPos(tempPlayerPos);
+    objPos tempFoodPos;
+    myFood->getFoodPos(tempFoodPos);
+    
 
     MacUILib_clearScreen();
     for (int i = 0; i < myGM->getBoardSizeY(); i++)
     {
         for (int j = 0; j < myGM->getBoardSizeX(); j++)
         {
+
             if (i == 0 || i == (myGM->getBoardSizeY() - 1) || j == 0 || j == (myGM->getBoardSizeX() - 1))
             {
                 MacUILib_printf("%c", border.getSymbol());
             }
     //          If at the player object position, print the player symbol
-            else if (i == tempPos.y && j == tempPos.x)
+            else if (i == tempPlayerPos.y && j == tempPlayerPos.x)
             {
-                MacUILib_printf("%c", tempPos.symbol);
+                MacUILib_printf("%c", tempPlayerPos.symbol);
+            }
+    //          If at food item position, print food symbol
+            else if(i == (tempFoodPos.y) && j == (tempFoodPos.x))
+            {
+                MacUILib_printf("%c", tempFoodPos.symbol);
             }
     //          Otherwise, print the space character
             else
             {
                 MacUILib_printf(" ");
+
             }
 
         }
@@ -106,8 +119,9 @@ void DrawScreen(void)
     }
     //MacUILib_printf("Object <%d, %d> with %c\n", myPos.x, myPos.y, myPos.symbol);
     MacUILib_printf("\n\n----------DEBUGGING INFO----------\n");
-    MacUILib_printf("Board Size: <%d, %d>\nPlayer Position: <%d, %d>\nPlayer Symbol: %c\n", myGM->getBoardSizeX(), myGM->getBoardSizeY(), tempPos.x, tempPos.y, tempPos.symbol);
+    MacUILib_printf("Board Size: <%d, %d>\nPlayer Position: <%d, %d>\nPlayer Symbol: %c\n", myGM->getBoardSizeX(), myGM->getBoardSizeY(), tempPlayerPos.x, tempPlayerPos.y, tempPlayerPos.symbol);
     myPlayer->printDir();
+    MacUILib_printf("\nFood Position: <%d, %d>\nFood Symbol: %c", tempFoodPos.x, tempFoodPos.y, tempFoodPos.symbol);
 }
 
 void LoopDelay(void)
@@ -121,7 +135,8 @@ void CleanUp(void)
 {
     MacUILib_clearScreen();
     delete myPlayer;
-    delete myGM;    
+    delete myGM;  
+    delete myFood;  
   
     MacUILib_uninit();
 }

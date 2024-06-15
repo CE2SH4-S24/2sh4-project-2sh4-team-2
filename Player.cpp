@@ -84,7 +84,7 @@ void Player::printDir()
     switch (myDir)
     {
     case STOP:
-        MacUILib_printf("NONE");
+        MacUILib_printf("STOP");
         break;
     case LEFT:
         MacUILib_printf("LEFT");
