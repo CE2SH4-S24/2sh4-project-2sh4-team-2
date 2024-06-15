@@ -18,6 +18,7 @@ GameMechs::GameMechs(int boardX, int boardY)
     input = 0;
     score = 0;
     exitFlag = false;
+    regenerate = false;
 
 // custom board sizes
     boardSizeX = boardX;
@@ -84,4 +85,12 @@ int GameMechs::getScore() const {
 
 void GameMechs::incrementScore(int amount) {
     score += amount;
+}
+
+bool GameMechs::getLoseFlagStatus() const {
+    return loseFlag;
+}
+
+void GameMechs::setLoseFlag(bool value) {
+    loseFlag = value;
 }

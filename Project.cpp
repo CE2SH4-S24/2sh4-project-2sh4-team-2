@@ -92,6 +92,11 @@ void RunLogic(void)
     myPlayer->movePlayer();
     myPlayer->getPlayerPos(tempPlayerPos);
 
+    if (myPlayer->checkCollision()) {  // Hypothetical function to check self-collision
+        myGM->setLoseFlag(true);
+        myGM->setExitTrue();
+    }
+
     if (tempPlayerPos.x == tempFoodPos.x && tempPlayerPos.y == tempFoodPos.y) {
         myFood->generateFood(); 
         myGM->incrementScore(); 

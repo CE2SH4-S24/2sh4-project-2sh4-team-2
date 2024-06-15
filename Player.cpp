@@ -157,3 +157,11 @@ void Player::movePlayer()
             break;
     }
 }
+
+bool Player::checkCollision() const {
+    if (playerPos.x < 0 || playerPos.x >= mainGameMechsRef->getBoardSizeX() ||
+        playerPos.y < 0 || playerPos.y >= mainGameMechsRef->getBoardSizeY()) {
+        return true;
+    }
+    return false;
+}

@@ -23,11 +23,15 @@ class Player
         void updatePlayerDir();
         void movePlayer();
         void printDir();
+        bool checkCollision() const;
 
+        void getPlayerPos(objPos &returnPos) const;  // Getter: Populates returnPos with player's current position
+        void setPlayerPos(int x, int y); 
     private:
         objPos playerPos;   // Upgrade this in iteration 3.       
         enum Dir myDir;
         bool regenerate;
+        
 
         // Need a reference to the Main Game Mechanisms
         GameMechs* mainGameMechsRef;
