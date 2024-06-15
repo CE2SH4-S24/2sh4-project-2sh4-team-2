@@ -48,7 +48,7 @@ int main(void)
     }
 
     CleanUp();
-
+    return 0;
 }
 
 
@@ -72,7 +72,8 @@ void GetInput(void)
 {
     if (MacUILib_hasChar())
     {
-        myGM->setInput(MacUILib_getChar());
+        char input = MacUILib_getChar();
+        myGM->setInput(input);
     }
 
      
@@ -90,6 +91,11 @@ void RunLogic(void)
     myPlayer->updatePlayerDir();
     myPlayer->movePlayer();
     myPlayer->getPlayerPos(tempPlayerPos);
+
+    if (tempPlayerPos.x == tempFoodPos.x && tempPlayerPos.y == tempFoodPos.y) {
+        myFood->generateFood(); 
+        myGM->incrementScore(); 
+    }
     
 }
 

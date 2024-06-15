@@ -7,15 +7,15 @@ You must watch the Project briefing and other supporting videos, and read throug
 
 Provide the information about your group below:
 
-Group Number: [Provide the group number assigned by the course instructor here]
+Group Number: [Team 2]
 
 Group Member 1 Information:
 
-Name: [Insert your full name here in format: Last name, First name]
+Name: [Chen, Yucheng]
 
-MacID: [Insert your macID here]
+MacID: [cheny883]
 
-Student No.: [Insert your numerical 9-digit McMaster student number here]
+Student No.: [400478105]
 
 Group Member 2 Information:
 

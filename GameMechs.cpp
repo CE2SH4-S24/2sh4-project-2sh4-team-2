@@ -75,3 +75,11 @@ void GameMechs::setRegenerate(bool boolean)
 {
     regenerate = boolean;
 }
+
+int GameMechs::getScore() const {
+    return score;
+}
+
+void GameMechs::incrementScore(int amount) {
+    score += amount;
+}
