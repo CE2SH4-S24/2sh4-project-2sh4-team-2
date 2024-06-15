@@ -4,6 +4,7 @@
 GameMechs::GameMechs()
 {
     input = 0;
+    score = 0;
     exitFlag = false;
     regenerate = false;
 
@@ -15,6 +16,7 @@ GameMechs::GameMechs()
 GameMechs::GameMechs(int boardX, int boardY)
 {
     input = 0;
+    score = 0;
     exitFlag = false;
 
 // custom board sizes

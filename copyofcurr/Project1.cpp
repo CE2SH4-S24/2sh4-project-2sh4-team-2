@@ -10,16 +10,13 @@ using namespace std;
 
 #define DELAY_CONST 100000
 
-//objPos myPos;
+GameMechs* myGM;
 Player* myPlayer;
-objPos border;
 Food* myFood;
 
+objPos border;
 objPos tempPlayerPos;
 objPos tempFoodPos;
-
-//bool exitFlag;
-GameMechs* myGM;
 
 //Function Declarations
 
@@ -48,7 +45,7 @@ int main(void)
     }
 
     CleanUp();
-    return 0;
+
 }
 
 
@@ -59,12 +56,14 @@ void Initialize(void)
 
     myGM = new GameMechs(20, 10);
     myPlayer = new Player(myGM);
+ 
     myFood = new Food(myPlayer, myGM);
-    //myPos.setObjPos(2, 3, '@');
-    border.setObjPos(0,0, '#');
     myFood->generateFood();
+ 
+    //myPos.setObjPos(2, 3, '@');
+ 
+    border.setObjPos(0,0, '#');
 
-    
 
 }
 
@@ -72,11 +71,8 @@ void GetInput(void)
 {
     if (MacUILib_hasChar())
     {
-        char input = MacUILib_getChar();
-        myGM->setInput(input);
+        myGM->setInput(MacUILib_getChar());
     }
-
-     
 }
 
 void RunLogic(void)
@@ -85,17 +81,13 @@ void RunLogic(void)
     {
         myFood->generateFood();
         myGM->setRegenerate(false);
-        
     }
+
     myFood->getFoodPos(tempFoodPos);
+
     myPlayer->updatePlayerDir();
     myPlayer->movePlayer();
     myPlayer->getPlayerPos(tempPlayerPos);
-
-    if (tempPlayerPos.x == tempFoodPos.x && tempPlayerPos.y == tempFoodPos.y) {
-        myFood->generateFood(); 
-        myGM->incrementScore(); 
-    }
     
 }
 
@@ -133,10 +125,6 @@ void DrawScreen(void)
         MacUILib_printf("\n");
             
     }
-    //GAME MESSAGES
-
-    MacUILib_printf("Score: %d", myGM->getScore());
-    
     //MacUILib_printf("Object <%d, %d> with %c\n", myPos.x, myPos.y, myPos.symbol);
     MacUILib_printf("\n\n----------DEBUGGING INFO----------\n");
     MacUILib_printf("Board Size: <%d, %d>\nPlayer Position: <%d, %d>\nPlayer Symbol: %c\n", myGM->getBoardSizeX(), myGM->getBoardSizeY(), tempPlayerPos.x, tempPlayerPos.y, tempPlayerPos.symbol);
