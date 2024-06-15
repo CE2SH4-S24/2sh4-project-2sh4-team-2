@@ -5,6 +5,7 @@ GameMechs::GameMechs()
 {
     input = 0;
     exitFlag = false;
+    regenerate = false;
 
 // default board sizes
     boardSizeX = 20;
@@ -64,3 +65,13 @@ void GameMechs::clearInput()
 
 // Provide definitions of more member functions as required
 // See Project Manual
+
+bool GameMechs::getRegenerateStatus()
+{
+    return regenerate;
+}
+
+void GameMechs::setRegenerate(bool boolean)
+{
+    regenerate = boolean;
+}

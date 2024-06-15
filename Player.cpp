@@ -6,7 +6,7 @@ Player::Player(GameMechs* thisGMRef)
 {
     mainGameMechsRef = thisGMRef;
     myDir = STOP;
-
+    mainGameMechsRef->setRegenerate(false);
     // more actions to be included
     //initial place of the player position when starting
     playerPos.setObjPos(mainGameMechsRef->getBoardSizeX()/2, mainGameMechsRef->getBoardSizeY()/2, '@');
@@ -38,7 +38,12 @@ void Player::updatePlayerDir()
             case ' ': // spacebar
                 mainGameMechsRef->setExitTrue(); // exit
                 break;
-     // Add more key processing here
+    // key 'n' or 'N' used to generate new food item
+            case 'n':
+            case 'N':
+                mainGameMechsRef->setRegenerate(true);
+                break;
+    // Add more key processing here
             case 'A':
             case 'a':
             if (myDir != RIGHT)
@@ -73,7 +78,7 @@ void Player::updatePlayerDir()
             
             default:
             break;
-        }     
+        }
         mainGameMechsRef->clearInput();
     }
 }
@@ -152,4 +157,3 @@ void Player::movePlayer()
             break;
     }
 }
-

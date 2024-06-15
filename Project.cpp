@@ -15,6 +15,8 @@ Player* myPlayer;
 objPos border;
 Food* myFood;
 
+objPos tempPlayerPos;
+objPos tempFoodPos;
 
 //bool exitFlag;
 GameMechs* myGM;
@@ -57,10 +59,12 @@ void Initialize(void)
 
     myGM = new GameMechs(20, 10);
     myPlayer = new Player(myGM);
+    myFood = new Food(myPlayer, myGM);
     //myPos.setObjPos(2, 3, '@');
     border.setObjPos(0,0, '#');
+    myFood->generateFood();
+
     
-    myFood = new Food(myPlayer, myGM);
 
 }
 
@@ -69,23 +73,29 @@ void GetInput(void)
     if (MacUILib_hasChar())
     {
         myGM->setInput(MacUILib_getChar());
-    }   
+    }
+
+     
 }
 
 void RunLogic(void)
 {
+    if(myGM->getRegenerateStatus())
+    {
+        myFood->generateFood();
+        myGM->setRegenerate(false);
+        
+    }
+    myFood->getFoodPos(tempFoodPos);
     myPlayer->updatePlayerDir();
     myPlayer->movePlayer();
+    myPlayer->getPlayerPos(tempPlayerPos);
+    
 }
 
 void DrawScreen(void)
 {
-    objPos tempPlayerPos;
-    myPlayer->getPlayerPos(tempPlayerPos);
-    objPos tempFoodPos;
-    myFood->getFoodPos(tempFoodPos);
     
-
     MacUILib_clearScreen();
     for (int i = 0; i < myGM->getBoardSizeY(); i++)
     {

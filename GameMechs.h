@@ -26,12 +26,17 @@ class GameMechs
         int boardSizeX;
         int boardSizeY;
 
+        bool regenerate;
+
     public:
         GameMechs();
         GameMechs(int boardX, int boardY);
         //~GameMechs(); //Destructor, may be needed
         bool getExitFlagStatus();
         void setExitTrue();
+
+        bool getRegenerateStatus();
+        void setRegenerate(bool boolean);
 
         char getInput();
         void setInput(char this_input);

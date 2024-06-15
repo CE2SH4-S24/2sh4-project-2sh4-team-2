@@ -8,7 +8,7 @@ Food::Food(Player* thisPlrRef, GameMechs* thisGMRef)
     foodPos.symbol = '*';
     //Seed the random integer generation function with current time.
     srand(time(NULL));
-    generateFood();
+
 }
 
 Food::~Food()
