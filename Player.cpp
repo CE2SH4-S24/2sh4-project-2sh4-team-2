@@ -198,3 +198,13 @@ void Player::increasePlayerLength(int growth)
 {
     growthby = growth;
 }
+
+void Player::printPlayerPos()
+{
+    MacUILib_printf("Snake Coordinates: \n");
+    for (int i = 0; i < playPosList->getSize(); i++)
+    {
+        playPosList->getElement(tempObjPos, i);
+        MacUILib_printf("List[%d] = <%d, %d>, Symbol = %c\n", i, tempObjPos.x, tempObjPos.y, tempObjPos.symbol);
+    }
+}

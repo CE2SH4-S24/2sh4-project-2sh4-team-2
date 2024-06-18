@@ -15,7 +15,9 @@ Player* myPlayer;
 objPos border;
 Food* myFood;
 
-objPos tempPlayerPos;
+objPosArrayList* tempPlayerPos;
+objPos temp;
+//objPos tempPlayerPos;
 objPos tempFoodPos;
 
 //bool exitFlag;
@@ -90,14 +92,17 @@ void RunLogic(void)
     myFood->getFoodPos(tempFoodPos);
     myPlayer->updatePlayerDir();
     myPlayer->movePlayer();
-    myPlayer->getPlayerPos(tempPlayerPos);
+    //myPlayer->getPlayerPos(tempPlayerPos);
+    tempPlayerPos = myPlayer->getPlayerPos();
 
-    if (myPlayer->checkCollision()) {  // Hypothetical function to check self-collision
+    // UNCOMMENT AND FIX
+    /*if (myPlayer->checkCollision()) {  // Hypothetical function to check self-collision
         myGM->setLoseFlag(true);
         myGM->setExitTrue();
-    }
+    }*/
+    tempPlayerPos[0].getElement(temp, 0);
 
-    if (tempPlayerPos.x == tempFoodPos.x && tempPlayerPos.y == tempFoodPos.y) {
+    if (temp.x == tempFoodPos.x && temp.y == tempFoodPos.y) {
         myFood->generateFood(); 
         myGM->incrementScore(); 
     }
@@ -112,15 +117,20 @@ void DrawScreen(void)
     {
         for (int j = 0; j < myGM->getBoardSizeX(); j++)
         {
-
+    //          If at the player object position, print the player symbol
+            int k = 0;
+            for (int p = 0; p < tempPlayerPos->getSize(); p++)
+            {
+                tempPlayerPos[p].getElement(temp, p);
+                if (i == temp.y && j == temp.x)
+                {
+                    MacUILib_printf("%c", temp.symbol);
+                    k = 1;
+                }
+            }
             if (i == 0 || i == (myGM->getBoardSizeY() - 1) || j == 0 || j == (myGM->getBoardSizeX() - 1))
             {
                 MacUILib_printf("%c", border.getSymbol());
-            }
-    //          If at the player object position, print the player symbol
-            else if (i == tempPlayerPos.y && j == tempPlayerPos.x)
-            {
-                MacUILib_printf("%c", tempPlayerPos.symbol);
             }
     //          If at food item position, print food symbol
             else if(i == (tempFoodPos.y) && j == (tempFoodPos.x))
@@ -130,8 +140,10 @@ void DrawScreen(void)
     //          Otherwise, print the space character
             else
             {
-                MacUILib_printf(" ");
-
+                if (k != 1)
+                {
+                    MacUILib_printf(" ");
+                }
             }
 
         }
@@ -144,7 +156,8 @@ void DrawScreen(void)
     
     //MacUILib_printf("Object <%d, %d> with %c\n", myPos.x, myPos.y, myPos.symbol);
     MacUILib_printf("\n\n----------DEBUGGING INFO----------\n");
-    MacUILib_printf("Board Size: <%d, %d>\nPlayer Position: <%d, %d>\nPlayer Symbol: %c\n", myGM->getBoardSizeX(), myGM->getBoardSizeY(), tempPlayerPos.x, tempPlayerPos.y, tempPlayerPos.symbol);
+    MacUILib_printf("Board Size: <%d, %d>\n", myGM->getBoardSizeX(), myGM->getBoardSizeY());
+    myPlayer->printPlayerPos();
     myPlayer->printDir();
     MacUILib_printf("\nFood Position: <%d, %d>\nFood Symbol: %c", tempFoodPos.x, tempFoodPos.y, tempFoodPos.symbol);
 }

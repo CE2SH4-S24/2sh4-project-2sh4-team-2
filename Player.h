@@ -26,8 +26,7 @@ class Player
         bool checkCollision() const;
         void increasePlayerLength(int growth);
         bool checkSelfCollision();
-
-
+        void printPlayerPos();
 
         void getPlayerPos(objPos &returnPos) const;  // Getter: Populates returnPos with player's current position
         void setPlayerPos(int x, int y); 
@@ -36,6 +35,7 @@ class Player
         enum Dir myDir;
         bool regenerate;
         int growthby;
+        objPos tempObjPos;
 
 
         // Need a reference to the Main Game Mechanisms

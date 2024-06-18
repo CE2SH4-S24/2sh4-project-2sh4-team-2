@@ -22,22 +22,26 @@ void Food::generateFood()
     bool flag = false;
     xRange = mainGMRef->getBoardSizeX() - 3;
     yRange = mainGMRef->getBoardSizeY() - 3;
-    objPos playerPos;
-    mainPlayer->getPlayerPos(playerPos);
+    objPosArrayList* playerPos = mainPlayer->getPlayerPos();
+    objPos temp;
 
     while (true)
     {
         bufX = (rand() % xRange) + 1;
         bufY = (rand() % yRange) + 1;
-        if (bufX != playerPos.x && bufY != playerPos.y)
+        for (int i = 0; i < playerPos->getSize(); i++)
         {
-            foodPos.x = bufX;
-            foodPos.y = bufY;
-            break;
-        }
-        else
-        {
-            continue; // get a new buf.
+            playerPos[i].getElement(temp, i);
+            if (bufX != temp.x && bufY != temp.y)
+            {
+                foodPos.x = bufX;
+                foodPos.y = bufY;
+                return;
+            }
+            else
+            {
+                continue; // get a new buf.
+            }
         }
     }    
 }
