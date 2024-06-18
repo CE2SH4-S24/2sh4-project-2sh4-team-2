@@ -14,11 +14,10 @@ using namespace std;
 Player* myPlayer;
 objPos border;
 Food* myFood;
-
+objPos tempFoodPos; // holds one objPos value of food (food coordinates)
 objPosArrayList* tempPlayerPos;
-objPos temp;
-//objPos tempPlayerPos;
-objPos tempFoodPos;
+objPos temp; // holds one objPos index value of playerPosList (snake body coordinates)
+
 
 //bool exitFlag;
 GameMechs* myGM;
@@ -63,11 +62,10 @@ void Initialize(void)
     myGM = new GameMechs(20, 10);
     myPlayer = new Player(myGM);
     myFood = new Food(myPlayer, myGM);
-    //myPos.setObjPos(2, 3, '@');
-    border.setObjPos(0,0, '#');
-    myFood->generateFood();
-    bool foodCollision = false;
-    myPlayer->increasePlayerLength(0);
+    border.setObjPos(0,0, '#'); //starting position and character symbol of border to be printed
+    myFood->generateFood(); //generates a random coordinate for food
+    bool foodCollision = false; // initializes snake head collision with food to false
+    myPlayer->increasePlayerLength(0); //initializes player length growth to 0;
 
     
 
@@ -98,13 +96,9 @@ void RunLogic(void)
     //myPlayer->getPlayerPos(tempPlayerPos);
     tempPlayerPos = myPlayer->getPlayerPos();
 
-    // UNCOMMENT AND FIX
-    /*if (myPlayer->checkCollision()) {  // Hypothetical function to check self-collision
-        myGM->setLoseFlag(true);
-        myGM->setExitTrue();
-    }*/
+ 
     tempPlayerPos->getHeadElement(temp);
-
+    foodCollision = false;
     if (temp.x == tempFoodPos.x && temp.y == tempFoodPos.y) {
         myFood->generateFood();
         foodCollision = true;
@@ -114,8 +108,8 @@ void RunLogic(void)
     
     if (myPlayer->checkSelfCollision())
     {
-        myGM->setLoseFlag(true);
-        myGM->setExitTrue();
+       myGM->setLoseFlag(true);
+    //    
     }
 }
 
@@ -132,7 +126,7 @@ void DrawScreen(void)
             for (int p = 0; p < tempPlayerPos->getSize(); p++)
             {
                 k = 0;
-                tempPlayerPos->getElement(temp, p); //isnt holding aList
+                tempPlayerPos->getElement(temp, p); 
                 if (i == temp.y && j == temp.x)
                 {
                     MacUILib_printf("%c", temp.symbol);
@@ -157,7 +151,6 @@ void DrawScreen(void)
             }
             else
             {
-                foodCollision = false;
                 k = 0;
             }
 
@@ -172,7 +165,7 @@ void DrawScreen(void)
     //MacUILib_printf("Object <%d, %d> with %c\n", myPos.x, myPos.y, myPos.symbol);
     MacUILib_printf("\n\n----------DEBUGGING INFO----------\n");
     MacUILib_printf("Board Size: <%d, %d>\n", myGM->getBoardSizeX(), myGM->getBoardSizeY());
-    myPlayer->printPlayerPos();
+    //myPlayer->printPlayerPos();
     myPlayer->printDir();
     MacUILib_printf("\nFood Position: <%d, %d>\nFood Symbol: %c", tempFoodPos.x, tempFoodPos.y, tempFoodPos.symbol);
 }
@@ -186,7 +179,7 @@ void LoopDelay(void)
 
 void CleanUp(void)
 {
-    MacUILib_clearScreen();
+    //MacUILib_clearScreen();
     delete myPlayer;
     delete myGM;  
     delete myFood;  

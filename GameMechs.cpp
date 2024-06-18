@@ -93,4 +93,8 @@ bool GameMechs::getLoseFlagStatus() const {
 
 void GameMechs::setLoseFlag(bool value) {
     loseFlag = value;
+    if (loseFlag)
+    {
+        exitFlag = true;
+    }
 }

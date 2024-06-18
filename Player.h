@@ -23,7 +23,7 @@ class Player
         void updatePlayerDir();
         void movePlayer();
         void printDir();
-        bool checkCollision() const;
+        //bool checkCollision() const;
         void increasePlayerLength(int growth);
         bool checkSelfCollision();
         void printPlayerPos();

@@ -31,7 +31,7 @@ void Food::generateFood()
         bufY = (rand() % yRange) + 1;
         for (int i = 0; i < playerPos->getSize(); i++)
         {
-            playerPos[i].getElement(temp, i);
+            playerPos->getElement(temp, i);
             if (bufX != temp.x && bufY != temp.y)
             {
                 foodPos.x = bufX;
@@ -43,7 +43,8 @@ void Food::generateFood()
                 continue; // get a new buf.
             }
         }
-    }    
+    }
+
 }
 
 void Food::getFoodPos(objPos &returnPos)
