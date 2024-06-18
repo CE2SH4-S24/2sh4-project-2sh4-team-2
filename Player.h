@@ -19,19 +19,24 @@ class Player
         Player(GameMechs* thisGMRef);
         ~Player();
 
-        void getPlayerPos(objPos &returnPos); // Upgrade this in iteration 3.
+        objPosArrayList* getPlayerPos();// updated for iteration 3
         void updatePlayerDir();
         void movePlayer();
         void printDir();
         bool checkCollision() const;
+        void increasePlayerLength(int growth);
+        bool checkSelfCollision();
+
+
 
         void getPlayerPos(objPos &returnPos) const;  // Getter: Populates returnPos with player's current position
         void setPlayerPos(int x, int y); 
     private:
-        objPos playerPos;   // Upgrade this in iteration 3.       
+        objPosArrayList* playPosList;   // Updated in iteration 3.       
         enum Dir myDir;
         bool regenerate;
-        
+        int growthby;
+
 
         // Need a reference to the Main Game Mechanisms
         GameMechs* mainGameMechsRef;
