@@ -112,6 +112,11 @@ void RunLogic(void)
         myPlayer->increasePlayerLength(1);
     }
     
+    if (myPlayer->checkSelfCollision())
+    {
+        myGM->setLoseFlag(true);
+        myGM->setExitTrue();
+    }
 }
 
 void DrawScreen(void)
@@ -132,6 +137,7 @@ void DrawScreen(void)
                 {
                     MacUILib_printf("%c", temp.symbol);
                     k = 1;
+                    break;
                     
                 }
             }
@@ -152,6 +158,7 @@ void DrawScreen(void)
             else
             {
                 foodCollision = false;
+                k = 0;
             }
 
         }

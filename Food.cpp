@@ -5,7 +5,7 @@ Food::Food(Player* thisPlrRef, GameMechs* thisGMRef)
 {
     mainGMRef = thisGMRef;
     mainPlayer = thisPlrRef;
-    foodPos.symbol = '*';
+    foodPos.symbol = 'o';
     //Seed the random integer generation function with current time.
     srand(time(NULL));
 

@@ -181,7 +181,7 @@ void Player::movePlayer()
 
 bool Player::checkSelfCollision() 
 {
-    for (int i = 1; i < playPosList->getSize(); ++i) //loop through entire body array
+    for (int i = 1; i < playPosList->getSize(); i++) //loop through entire body array
     {
         objPos bodySegment;
         playPosList->getElement(bodySegment, i);
