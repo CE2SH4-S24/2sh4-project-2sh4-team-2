@@ -23,6 +23,7 @@ objPos tempFoodPos;
 //bool exitFlag;
 GameMechs* myGM;
 
+bool foodCollision;
 //Function Declarations
 
 void Initialize(void);
@@ -65,6 +66,7 @@ void Initialize(void)
     //myPos.setObjPos(2, 3, '@');
     border.setObjPos(0,0, '#');
     myFood->generateFood();
+    bool foodCollision = false;
 
     
 
@@ -103,7 +105,8 @@ void RunLogic(void)
     tempPlayerPos[0].getElement(temp, 0);
 
     if (temp.x == tempFoodPos.x && temp.y == tempFoodPos.y) {
-        myFood->generateFood(); 
+        myFood->generateFood();
+        foodCollision = true;
         myGM->incrementScore(); 
     }
     
@@ -111,6 +114,7 @@ void RunLogic(void)
 
 void DrawScreen(void)
 {
+    int k = 0;
     
     MacUILib_clearScreen();
     for (int i = 0; i < myGM->getBoardSizeY(); i++)
@@ -118,9 +122,9 @@ void DrawScreen(void)
         for (int j = 0; j < myGM->getBoardSizeX(); j++)
         {
     //          If at the player object position, print the player symbol
-            int k = 0;
             for (int p = 0; p < tempPlayerPos->getSize(); p++)
             {
+                k = 0;
                 tempPlayerPos[p].getElement(temp, p);
                 if (i == temp.y && j == temp.x)
                 {
@@ -133,17 +137,18 @@ void DrawScreen(void)
                 MacUILib_printf("%c", border.getSymbol());
             }
     //          If at food item position, print food symbol
-            else if(i == (tempFoodPos.y) && j == (tempFoodPos.x))
+            else if(!foodCollision && i == (tempFoodPos.y) && j == (tempFoodPos.x))
             {
                 MacUILib_printf("%c", tempFoodPos.symbol);
             }
     //          Otherwise, print the space character
+            else if (k == 0)
+            {
+                MacUILib_printf(" ");
+            }
             else
             {
-                if (k != 1)
-                {
-                    MacUILib_printf(" ");
-                }
+                foodCollision = false;
             }
 
         }
