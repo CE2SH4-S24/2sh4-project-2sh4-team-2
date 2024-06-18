@@ -12,6 +12,7 @@ Player::Player(GameMechs* thisGMRef)
     playPosList = new objPosArrayList();
     objPos playerPos(mainGameMechsRef->getBoardSizeX() / 2, mainGameMechsRef->getBoardSizeY() / 2, '*');
     playPosList->insertHead(playerPos);
+    growthby = 0;
 }
 
 
@@ -119,7 +120,7 @@ void Player::movePlayer()
     playPosList->getHeadElement(currentHead);
 
     // Calculate the new head position based on the current direction
-    increasePlayerLength(0);
+    
     int newX = currentHead.x;
     int newY = currentHead.y;
 
@@ -169,12 +170,13 @@ void Player::movePlayer()
     playPosList->insertHead(currentHead);
 
     //if player did not grow, remove the tail making it seem like the player moved
-    if (growthby == 0) {
+    if (growthby <= 0) {
         playPosList->removeTail();
     }
     else { //don't remove the tail, and reset helper flag
-        growthby--;
-    }
+        growthby = 0;
+    }   
+
 }   
 
 bool Player::checkSelfCollision() 

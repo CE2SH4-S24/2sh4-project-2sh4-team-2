@@ -67,6 +67,7 @@ void Initialize(void)
     border.setObjPos(0,0, '#');
     myFood->generateFood();
     bool foodCollision = false;
+    myPlayer->increasePlayerLength(0);
 
     
 
@@ -102,12 +103,13 @@ void RunLogic(void)
         myGM->setLoseFlag(true);
         myGM->setExitTrue();
     }*/
-    tempPlayerPos[0].getElement(temp, 0);
+    tempPlayerPos->getHeadElement(temp);
 
     if (temp.x == tempFoodPos.x && temp.y == tempFoodPos.y) {
         myFood->generateFood();
         foodCollision = true;
         myGM->incrementScore(); 
+        myPlayer->increasePlayerLength(1);
     }
     
 }
@@ -125,11 +127,12 @@ void DrawScreen(void)
             for (int p = 0; p < tempPlayerPos->getSize(); p++)
             {
                 k = 0;
-                tempPlayerPos[p].getElement(temp, p);
+                tempPlayerPos->getElement(temp, p); //isnt holding aList
                 if (i == temp.y && j == temp.x)
                 {
                     MacUILib_printf("%c", temp.symbol);
                     k = 1;
+                    
                 }
             }
             if (i == 0 || i == (myGM->getBoardSizeY() - 1) || j == 0 || j == (myGM->getBoardSizeX() - 1))

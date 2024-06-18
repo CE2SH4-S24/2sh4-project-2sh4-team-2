@@ -19,17 +19,17 @@ int objPosArrayList::getSize() {
 
 void objPosArrayList::insertHead(objPos thisPos) {
     if (sizeList < ARRAY_MAX_CAP) {
-        for (int i = sizeList; i > 0; --i) { 
+        for (int i = sizeList; i > 0; i--) { 
             aList[i] = aList[i - 1]; 
         }
         aList[0] = thisPos; 
-        ++sizeList;
+        sizeList++;
     }
 }
 
 void objPosArrayList::removeHead() {
     if (sizeList > 0) {
-        for (int i = 0; i < sizeList - 1; ++i) {
+        for (int i = 0; i < sizeList - 1; i++) {
             aList[i] = aList[i + 1];
         }
         --sizeList;
@@ -45,7 +45,7 @@ void objPosArrayList::insertTail(objPos thisPos) {
 
 void objPosArrayList::removeTail() {
     if (sizeList > 0) {
-        --sizeList;
+        sizeList--;
     }
 }
 
@@ -71,11 +71,15 @@ void objPosArrayList::getElement(objPos& returnPos, int index) {
     if (index >= 0 && index < sizeList) {
         returnPos = aList[index];
     }
+    else
+    {
+        returnPos = objPos {-1, -1, '\0'};
+    }
 }
 
 void objPosArrayList::removeElement(int index) {
     if (index >= 0 && index < sizeList) {
-        for (int i = index; i < sizeList - 1; ++i) {
+        for (int i = index; i < sizeList - 1; i++) {
             aList[i] = aList[i + 1]; 
         }
         sizeList--; 
