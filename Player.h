@@ -55,7 +55,7 @@ class Player
         objPos tempObjPos;
 
         Food* foodRef;
-
+        
         // Need a reference to the Main Game Mechanisms
         GameMechs* mainGameMechsRef;
 };

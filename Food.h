@@ -1,28 +1,27 @@
 #ifndef FOOD_H
 #define FOOD_H
 #include "objPosArrayList.h"
-#include "Player.h"
 #include "GameMechs.h"
 
 class Food
 {    
     public:
-        Food(Player* thisPlrRef, GameMechs* thisGMRef);
+        Food();
         ~Food();
 
-        void generateFood();
+        void generateFood(objPosArrayList* blockoff);
         void getFoodPos(objPos &returnPos, int index);
         objPosArrayList* getFoodList();
+
+        void getBoardSize(GameMechs* gamemechs); //references the GameMechs class to store size of board
 
         
 
     private:
         objPos foodPos;
         objPosArrayList* foodBucket;// this is for above and beyond
-
-        // Need a reference to the Main Game Mechanisms
-        GameMechs* mainGMRef;
-        Player* mainPlayer;
+        int boardX; // board X size
+        int boardY; // board Y size
         
 };
 

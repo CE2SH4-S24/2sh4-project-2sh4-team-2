@@ -61,8 +61,8 @@ class GameMechs
 
         int getScore() const;  
         void incrementScore(int amount); 
-        //additional disappearing print message
-
+        
+        //additional disappearing print message functions
         int getGameMsg();
         int getMsgTime();
         int getCountMsg();

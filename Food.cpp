@@ -3,10 +3,9 @@
 #include <ctime>   //for time()
 
 
-Food::Food(Player* thisPlrRef, GameMechs* thisGMRef)
+Food::Food()
 {
-    mainGMRef = thisGMRef;
-    mainPlayer = thisPlrRef;
+    
     //foodPos.symbol = 'o';
     foodBucket = new objPosArrayList();
     //Seed the random integer generation function with current time.
@@ -19,7 +18,7 @@ Food::~Food()
     delete foodBucket;   
 }
 
-void Food::generateFood()
+void Food::generateFood(objPosArrayList* blockoff)
 {
     foodBucket->clear();
 
@@ -27,76 +26,66 @@ void Food::generateFood()
     bool positionIsFree;
 
     //bool flag = false;
-    xRange = mainGMRef->getBoardSizeX() - 3;
-    yRange = mainGMRef->getBoardSizeY() - 3;
-    objPosArrayList* playerPos = mainPlayer->getPlayerPos();
+    xRange = boardX - 3;
+    yRange = boardY - 3;
+
     objPos buf;
     objPos temp;;
     bool flag = 0;
-    //int size = foodBucket->getSize();
-    while (n < 5)
+    
+    while (n < 5) //doesn't 
     {
-        bufX = (rand() % xRange) + 1;
-        bufY = (rand() % yRange) + 1;
+        bufX = (rand() % xRange) + 1; //generates an x coordinate within game borders
+        bufY = (rand() % yRange) + 1; //generates a y coordinate within game borders
 
-        positionIsFree = true;
-        for (int i = 0; i < playerPos->getSize(); i++)
+        positionIsFree = true; // initialized to true, maintains true if it passes all boundary cases 
+        for (int i = 0; i < blockoff->getSize(); i++)
         {
-            playerPos->getElement(temp, i);
+            blockoff->getElement(temp, i);
             if (bufX == temp.x && bufY == temp.y)
             {
-                positionIsFree = false; // Position collides with player's body
+                positionIsFree = false; // Position collides with player's body, generate a new position
                 break;
             }
-            /*else if ((bufX+1 == temp.x && bufY == temp.y) || (bufY+1 == temp.y && bufX == temp.x) || (bufX-1 == temp.x && bufY == temp.y) || (bufY-1 == temp.y && bufX == temp.x))
-            {
-                positionIsFree = false; // Position too close to player head
-                break;
-            }
-            else if ((bufX+2 == temp.x && temp.y == bufX) || (bufY+2 == temp.y && bufX == temp.x) || (bufX-2 == temp.x && bufY == temp.y) || (bufY-2 == temp.y && bufX == temp.x))
-            {
-                positionIsFree = false; // Position too close to player head
-                break;
-            }*/
         }
-        for (int i = -3; i < 3; i++)
+        for (int i = -4; i < 4; i++) // spaces in all directions around player head
         {
-            if ((bufX+i == temp.x && bufY == temp.y) || (bufY+i == temp.y && bufX == temp.x) || (bufX+i == temp.x && bufY+i == temp.y))
+            if (((bufX+i == temp.x && bufY == temp.y) || (bufY+i == temp.y && bufX == temp.x)) || ((bufX+i == temp.x && bufY+i == temp.y) || (bufX-i == temp.x && bufY+i == temp.y)))
             {
-                positionIsFree = false; // Position too close to player head
-                break;
+                positionIsFree = false; // Position too close to player head, generate a new position
                 flag = 1;
+                break;
             }
         }
         if (!flag)
         {
-            for (int i = 0; i < 5; i++) // checks food bucket items to ensure no two items hold the same coordinates
+            for (int i = 0; i < n; i++) // checks food bucket items to ensure no two items hold identical coordinates
             {
                 foodBucket->getElement(temp, i);
                 if (bufX == temp.x && bufY == temp.y)
                 {
-                    positionIsFree = false;
+                    positionIsFree = false; // prior food bucket item already holds these coordinates, generate new a position
                     break;
                 }
             }
         }
 
-        if (positionIsFree)
+        if (positionIsFree) //if random coordinates generated pass all above tests, insert them in one objPos package in the foodBucket 
         {
             foodPos.x = bufX;
             foodPos.y = bufY;
             
             // Randomly select food type with different probabilities
             //int randValue = rand() % 100; // Generate a random number between 0 and 99
-            if (n < 3)
+            if (n < 3) // for 3/5 food items, symbol is 'o'
             {
                 buf.symbol = 'o';
             }
-            else if (n == 3)
+            else if (n == 3) //for 1/5 food items, symbol is '0'
             {
                 buf.symbol = '0';
             }
-            else if (n == 4)
+            else if (n == 4) //for 1/5 food items, symbol is '+'
             {
                 buf.symbol = '+';
             }
@@ -106,72 +95,21 @@ void Food::generateFood()
 
             if (n == 0)
             {
-                foodBucket->insertHead(buf);
+                foodBucket->insertHead(buf); // inserts first element in foodBucket
             }
             else
             {
-                foodBucket->insertTail(buf);
+                foodBucket->insertTail(buf); // inserts next 4 elements in foodBucket
             }
             n++;
         }
     }
 }
 
-/*
-    while(foodBucket->getSize() != 0)
-    {
-        foodBucket->removeTail();
-
-    }
- //need to exclude cases where coordinates are equal to another element's coordinates for food bucket itself
-   while (n < 5)
-    {
-        bufX = (rand() % xRange) + 1;
-        bufY = (rand() % yRange) + 1;
-
-        for (int i = 0; i < playerPos->getSize(); i++)
-        {
-            playerPos->getElement(temp, i);
-            if (bufX != temp.x && bufY != temp.y)
-            {
-                foodPos.x = bufX;
-                foodPos.y = bufY;
-                buf = {bufX, bufY, 'o'};
-                if(n < 3)
-                {
-                    buf.symbol = 'o';
-                }
-                else if (n == 3)
-                {
-                    buf.symbol = '0';
-                }
-                else if (n == 4)
-                {
-                    buf.symbol = '+';
-                }
-
-                if (n == 0)
-                {
-                    foodBucket->insertHead(buf);
-                }
-                else
-                {
-                    foodBucket->insertTail(buf);
-                }
-                n++;
-            }
-            else{
-                break;
-            }
-        }
-        continue;
-    }
-}
-*/
 
 void Food::getFoodPos(objPos &returnPos, int index)
 {
-    objPos buffer;
+    objPos buffer; //temporary holder to recieve all members of objPos for foodBucket element
     foodBucket->getElement(buffer, index);
     returnPos.setObjPos(buffer.x, buffer.y, buffer.symbol);
 }
@@ -180,3 +118,10 @@ objPosArrayList* Food::getFoodList()
 {
     return foodBucket;
 }
+
+void Food::getBoardSize(GameMechs* gamemechs)
+{
+    boardX = gamemechs->getBoardSizeX();
+    boardY = gamemechs->getBoardSizeY();
+}
+

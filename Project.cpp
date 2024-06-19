@@ -62,21 +62,18 @@ void Initialize(void)
     MacUILib_init();
     MacUILib_clearScreen();
     
-    // possible board sizes
-    // small board :20, 30 --> call with no parameters
-    // medium 1: 24, 12 medium2: 26, 13, medium3: 28, 14
-    //large1: 30,15, large2: 32, 16
     myGM = new GameMechs(28, 14); 
     myPlayer = new Player(myGM);
-    myFood = new Food(myPlayer, myGM);
+    myFood = new Food(); 
     border.setObjPos(0,0, '#'); //starting position and character symbol of border to be printed
-    myFood->generateFood(); //generates a random coordinate for food
+    tempPlayerPos = myPlayer->getPlayerPos();
+    myFood->getBoardSize(myGM);
+    myFood->generateFood(tempPlayerPos); //generates a random coordinate for food
     bool foodCollision = false; // initializes snake head collision with food to false
     myPlayer->increasePlayerLength(0); //initializes player length growth to 0;
     myGM->setLoseFlag(false);
-    myPlayer->initializeSpeed();
-    //gameMsg = 0;
-    //countMsg = 0;
+    myPlayer->initializeSpeed(); 
+
 
 }
 
@@ -93,9 +90,9 @@ void GetInput(void)
 
 void RunLogic(void)
 {
-    if(myGM->getRegenerateStatus())
+    if(myGM->getRegenerateStatus()) //checks for call to generate food
     {
-        myFood->generateFood();
+        myFood->generateFood(tempPlayerPos);
         myGM->setRegenerate(false);
         
     }
@@ -109,46 +106,51 @@ void RunLogic(void)
     
     objPos tempFoodPos;
 
-    if (myGM->getGameMsg())
+    if (myGM->getGameMsg()) // checks if special game messages should be printed
     {
-        myGM->addCountMsg();
+        myGM->addCountMsg(); //monitors delay counter for special messages
     }
     else
     {
-        myGM->resetCountMsg();
+        myGM->resetCountMsg(); //reinitializes delay counter
     }
 
-    for (int n = 0; n < 5; n++)
+    for (int n = 0; n < 5; n++) //checks all 5 food items for collision with snake
     {
         myFood->getFoodPos(tempFoodPos, n);
         if (temp.x == tempFoodPos.x && temp.y == tempFoodPos.y)
         {
             foodCollision = true;
             
-            if(tempFoodPos.symbol == '0') {
-                myGM->incrementScore(30); 
+            if(tempFoodPos.symbol == '0') 
+            {
+                myGM->incrementScore(30); //self explanatory, increases score by 30
                 myPlayer->increasePlayerLength(0);
-                myGM->setGameMsg(1);
-                myGM->resetCountMsg();
-            } else if(tempFoodPos.symbol == '+') {
+                myGM->setGameMsg(1); //sets special game message, prints: "+30 score! +0 length!"
+                myGM->resetCountMsg(); //resets delay counter for special message
+            } 
+            else if(tempFoodPos.symbol == '+') 
+            {
                 myGM->incrementScore(50); 
                 myPlayer->increasePlayerLength(5);
-                myGM->setGameMsg(2);
+                myGM->setGameMsg(2); //special game message: "+50 score! +5 length!"
                 myGM->resetCountMsg();
-            } else {
+            } 
+            else 
+            {
                 myGM->incrementScore(10); 
                 myPlayer->increasePlayerLength(1);
-                myGM->setGameMsg(3);
-                myGM->resetCountMsg();
+                myGM->setGameMsg(3); // special game message: "+10 score! +1 length!"
+                myGM->resetCountMsg(); 
             }
-            myFood->generateFood();
+            myFood->generateFood(tempPlayerPos);
             break;
         }
     }
     
-    if (myPlayer->checkSelfCollision())
+    if (myPlayer->checkSelfCollision()) // if snake head collides with snake body, game exits
     {
-       myGM->setLoseFlag(true);   
+       myGM->setLoseFlag(true); 
     }
 }
 
@@ -206,16 +208,15 @@ void DrawScreen(void)
                 k = 0;
                 t = 0;
             }
-
         }
         if (i == 5)
         {
-            myGM->printSpecialMessages();
+            myGM->printSpecialMessages(); //prints score and length messages when collision with food occurs
         }
         MacUILib_printf("\n");   
     }
     //GAME MESSAGES
-    if (myGM->getLoseFlagStatus() == true)
+    if (myGM->getLoseFlagStatus() == true) // messages to be printed when exitflag is true
     {
         MacUILib_printf("Self collision occurred! You lose.\nYour final score is: %d\n", myGM->getScore());
     
@@ -227,18 +228,19 @@ void DrawScreen(void)
         MacUILib_printf("\nPress < or > to change Game Speed.\n");
         MacUILib_printf("Press n to generate new food.\n");
     }
+
+    //Debugging print messages
     /*
     MacUILib_printf("\n\n----------DEBUGGING INFO----------\n");
     MacUILib_printf("Board Size: <%d, %d>\n", myGM->getBoardSizeX(), myGM->getBoardSizeY());
-    myPlayer->printPlayerPosHead();
+    myPlayer->printPlayerPosList();
     myPlayer->printDir();
     MacUILib_printf("\nFood Position: <%d, %d>\nFood Symbol: %c", tempFoodPos.x, tempFoodPos.y, tempFoodPos.symbol);
     */
 }
-
 void LoopDelay(void)
 {
-    MacUILib_Delay(myPlayer->getSpeed()); // 0.1s delay
+    MacUILib_Delay(myPlayer->getSpeed()); // enumeration, player can decide delay using input keys '<' '>'
 
 }
 

@@ -87,19 +87,19 @@ void Player::updatePlayerDir()
             case '<':
             switch (speedLvl)
             {
-                case L5:           // 500000 (0.50s)
-                    speedLvl = L4; // 350000 (0.35s)
+                case L5:           // 50000  (0.05s)
+                    speedLvl = L4; // 100000 (0.10s)
                     break;
                 case L4:
                     speedLvl = L3; // 200000 (0.20s)
                     break;
                 case L3:
-                    speedLvl = L2; // 100000 (0.10s)
+                    speedLvl = L2; // 350000 (0.35s)
                     break;
                 case L2:
-                    speedLvl = L1; // 50000 (0.05s)
+                    speedLvl = L1; // 500000 (0.50s)
                     break;
-                case L1:           // do nothing (0.05s)
+                case L1:           // do nothing (0.50s)
                     break;    
             }
             break;
@@ -107,19 +107,19 @@ void Player::updatePlayerDir()
             case '>':
             switch (speedLvl)
             {
-                case L1:           // 50000 (0.05s)
-                    speedLvl = L2; // 100000 (0.20s)
+                case L1:           // 500000 (0.50s)
+                    speedLvl = L2; // 350000 (0.35s)
                     break;
                 case L2:
                     speedLvl = L3; // 200000 (0.20s)
                     break;
                 case L3:
-                    speedLvl = L4; // 350000 (0.20s)
+                    speedLvl = L4; // 100000 (0.10s)
                     break;
                 case L4:
-                    speedLvl = L5; // 500000 (0.50s)
+                    speedLvl = L5; // 50000 (0.05s)
                     break;
-                case L5:           // do nothing (0.50s)
+                case L5:           // do nothing (0.05s)
                     break;    
             }
     break; 
@@ -132,13 +132,13 @@ void Player::updatePlayerDir()
 
 void Player::initializeSpeed()
 {
-    speedLvl = L4;
+    speedLvl = L4; // initializes delay at game start to 100000 (0.10s)
 }
 int Player::getSpeed()
 {
     return speedLvl;
 }
-void Player::printSpeed()
+void Player::printSpeed() //prints speed message on console
 {
     MacUILib_printf("\nGame Speed: ");
     switch (speedLvl)
@@ -165,7 +165,7 @@ void Player::printSpeed()
     MacUILib_printf(" (%.3f second delay)\n", (speedLvl/1000000.0));
 }
 
-void Player::printDir()
+void Player::printDir() //prints direction that is inputted into the console, debugging function
 {
     MacUILib_printf("Direction: ");
     switch (myDir)
@@ -204,7 +204,7 @@ void Player::movePlayer()
 
     
     // PPA3 Finite State Machine logic
-    switch (myDir) {
+    switch (myDir) { // snake head movement logic
     case UP:
         if (newY > 1) {
             newY--;
@@ -252,8 +252,7 @@ void Player::movePlayer()
         playPosList->removeTail();
     }
     else { //don't remove the tail, and reset helper flag
-        //growthby = 0;
-        growthby --;
+        growthby--;
     }   
 
 }   
@@ -281,7 +280,7 @@ void Player::increasePlayerLength(int growth)
     growthby = growth;
 }
 
-void Player::printPlayerPosList()
+void Player::printPlayerPosList() // for debugging purposes, prints array of snake body
 {
     MacUILib_printf("Snake Coordinates: \n");
     for (int i = 0; i < playPosList->getSize(); i++)
@@ -290,14 +289,14 @@ void Player::printPlayerPosList()
         MacUILib_printf("List[%d] = <%d, %d>, Symbol = %c\n", i, tempObjPos.x, tempObjPos.y, tempObjPos.symbol);
     }
 }
-void Player::printPlayerPosHead()
+void Player::printPlayerPosHead() // for debugging purposes, prints coordinates of snake head
 {
     playPosList->getElement(tempObjPos, 0);
     MacUILib_printf("Snake Head Position: <%d, %d>\n", tempObjPos.x, tempObjPos.y);
     MacUILib_printf("Snake Head Symbol: @\n");
 }
 
-int Player::checkFoodConsumption() 
+int Player::checkFoodConsumption()  //checks whether food has been consumed
 {
     objPos playerPos;
     this->getPlayerPos()->getHeadElement(playerPos);

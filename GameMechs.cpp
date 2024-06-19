@@ -12,7 +12,7 @@ GameMechs::GameMechs()
     boardSizeX = 20;
     boardSizeY = 10;
 
-    //additional features
+//additional features
     gameMsg = 0;
     countMsg = 0;
 }
@@ -40,7 +40,6 @@ GameMechs::~GameMechs()
 
 }
 */
-
 
 bool GameMechs::getExitFlagStatus()
 {
@@ -106,12 +105,12 @@ bool GameMechs::getLoseFlagStatus() const {
 
 void GameMechs::setLoseFlag(bool value) {
     loseFlag = value;
-    if (loseFlag)
+    if (loseFlag) //sets exit flag to true once lose flag is set to true
     {
         exitFlag = true;
     }
 }
-
+// functions to implement dissapearing messages
 int GameMechs::getGameMsg()
 {
     return gameMsg;
@@ -141,7 +140,7 @@ void GameMechs::setGameMsg(int n)
     gameMsg = n;
 }
 
-void GameMechs::GameMechs::printSpecialMessages()
+void GameMechs::GameMechs::printSpecialMessages() 
 {
     if(!getLoseFlagStatus() && gameMsg)
     {
