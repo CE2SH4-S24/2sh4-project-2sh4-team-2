@@ -79,12 +79,86 @@ void Player::updatePlayerDir()
                 myDir = DOWN;
             }
             break;
-            
+            case ',': // decrease speed up to 0.05s second delay
+            case '<':
+            switch (speedLvl)
+            {
+                case L5:           // 500000 (0.50s)
+                    speedLvl = L4; // 350000 (0.35s)
+                    break;
+                case L4:
+                    speedLvl = L3; // 200000 (0.20s)
+                    break;
+                case L3:
+                    speedLvl = L2; // 100000 (0.10s)
+                    break;
+                case L2:
+                    speedLvl = L1; // 50000 (0.05s)
+                    break;
+                case L1:           // do nothing (0.05s)
+                    break;    
+            }
+            break;
+            case '.': // increase speed up to 0.5s delay
+            case '>':
+            switch (speedLvl)
+            {
+                case L1:           // 50000 (0.05s)
+                    speedLvl = L2; // 100000 (0.20s)
+                    break;
+                case L2:
+                    speedLvl = L3; // 200000 (0.20s)
+                    break;
+                case L3:
+                    speedLvl = L4; // 350000 (0.20s)
+                    break;
+                case L4:
+                    speedLvl = L5; // 500000 (0.50s)
+                    break;
+                case L5:           // do nothing (0.50s)
+                    break;    
+            }
+    break; 
             default:
             break;
         }
         mainGameMechsRef->clearInput();
     }
+}
+
+void Player::initializeSpeed()
+{
+    speedLvl = L4;
+}
+int Player::getSpeed()
+{
+    return speedLvl;
+}
+void Player::printSpeed()
+{
+    MacUILib_printf("\nGame Speed: ");
+    switch (speedLvl)
+    {
+    case L1:
+        MacUILib_printf("1");
+        break;
+    case L2:
+        MacUILib_printf("2");
+        break;
+    case L3:
+        MacUILib_printf("3");
+        break;
+    case L4:
+        MacUILib_printf("4");
+        break;
+    case L5:
+        MacUILib_printf("5");
+        break;
+    default:
+        break;
+    }
+
+    MacUILib_printf(" (%.3f second delay)\n", (speedLvl/1000000.0));
 }
 
 void Player::printDir()
@@ -106,7 +180,7 @@ void Player::printDir()
         break;
     case DOWN:
         MacUILib_printf("DOWN");
-        break;
+        break;   
     default:
         break;
     }
@@ -202,7 +276,7 @@ void Player::increasePlayerLength(int growth)
     growthby = growth;
 }
 
-void Player::printPlayerPos()
+void Player::printPlayerPosList()
 {
     MacUILib_printf("Snake Coordinates: \n");
     for (int i = 0; i < playPosList->getSize(); i++)
@@ -210,4 +284,10 @@ void Player::printPlayerPos()
         playPosList->getElement(tempObjPos, i);
         MacUILib_printf("List[%d] = <%d, %d>, Symbol = %c\n", i, tempObjPos.x, tempObjPos.y, tempObjPos.symbol);
     }
+}
+void Player::printPlayerPosHead()
+{
+    playPosList->getElement(tempObjPos, 0);
+    MacUILib_printf("Snake Head Position: <%d, %d>\n", tempObjPos.x, tempObjPos.y);
+    MacUILib_printf("Snake Head Symbol: @\n");
 }

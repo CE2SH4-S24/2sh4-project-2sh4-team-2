@@ -55,7 +55,7 @@ class GameMechs
         void setLoseFlag(bool value);
 
         int getScore() const;  
-        void incrementScore(int amount = 1); 
+        void incrementScore(int amount); 
 
 };
 

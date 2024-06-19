@@ -66,7 +66,8 @@ void Initialize(void)
     myFood->generateFood(); //generates a random coordinate for food
     bool foodCollision = false; // initializes snake head collision with food to false
     myPlayer->increasePlayerLength(0); //initializes player length growth to 0;
-
+    myGM->setLoseFlag(false);
+    myPlayer->initializeSpeed();
     
 
 }
@@ -102,7 +103,7 @@ void RunLogic(void)
     if (temp.x == tempFoodPos.x && temp.y == tempFoodPos.y) {
         myFood->generateFood();
         foodCollision = true;
-        myGM->incrementScore(); 
+        myGM->incrementScore(10); 
         myPlayer->increasePlayerLength(1);
     }
     
@@ -129,7 +130,15 @@ void DrawScreen(void)
                 tempPlayerPos->getElement(temp, p); 
                 if (i == temp.y && j == temp.x)
                 {
-                    MacUILib_printf("%c", temp.symbol);
+                    if (p == 0)
+                    {
+                        MacUILib_printf("@");                        
+                        
+                    }
+                    else
+                    {
+                        MacUILib_printf("%c", temp.symbol);                        
+                    }
                     k = 1;
                     break;
                     
@@ -159,20 +168,26 @@ void DrawScreen(void)
             
     }
     //GAME MESSAGES
-
-    MacUILib_printf("Score: %d", myGM->getScore());
-    
-    //MacUILib_printf("Object <%d, %d> with %c\n", myPos.x, myPos.y, myPos.symbol);
+    if (myGM->getLoseFlagStatus() == true)
+    {
+        MacUILib_printf("Self collision occurred! You lose.\nYour final score is: %d", myGM->getScore());
+    }
+    else
+    {
+        MacUILib_printf("Score: %d", myGM->getScore());
+    }
+    myPlayer->printSpeed();
+    MacUILib_printf("Press < or > to change Game Speed.\n");
     MacUILib_printf("\n\n----------DEBUGGING INFO----------\n");
     MacUILib_printf("Board Size: <%d, %d>\n", myGM->getBoardSizeX(), myGM->getBoardSizeY());
-    //myPlayer->printPlayerPos();
+    myPlayer->printPlayerPosHead();
     myPlayer->printDir();
     MacUILib_printf("\nFood Position: <%d, %d>\nFood Symbol: %c", tempFoodPos.x, tempFoodPos.y, tempFoodPos.symbol);
 }
 
 void LoopDelay(void)
 {
-    MacUILib_Delay(DELAY_CONST); // 0.1s delay
+    MacUILib_Delay(myPlayer->getSpeed()); // 0.1s delay
 
 }
 
