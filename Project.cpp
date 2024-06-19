@@ -17,6 +17,9 @@ Food* myFood;
 objPos tempFoodPos; // holds one objPos value of food (food coordinates)
 objPosArrayList* tempPlayerPos;
 objPos temp; // holds one objPos index value of playerPosList (snake body coordinates)
+const int msgTime = 5; // number of screen refreshes before game messages disappear
+int countMsg;
+int gameMsg;
 
 
 //bool exitFlag;
@@ -58,8 +61,12 @@ void Initialize(void)
 {
     MacUILib_init();
     MacUILib_clearScreen();
-
-    myGM = new GameMechs(20, 10);
+    
+    // possible board sizes
+    // small board :20, 30 --> call with no parameters
+    // medium 1: 24, 12 medium2: 26, 13, medium3: 28, 14
+    //large1: 30,15, large2: 32, 16
+    myGM = new GameMechs(26, 13); 
     myPlayer = new Player(myGM);
     myFood = new Food(myPlayer, myGM);
     border.setObjPos(0,0, '#'); //starting position and character symbol of border to be printed
@@ -68,7 +75,8 @@ void Initialize(void)
     myPlayer->increasePlayerLength(0); //initializes player length growth to 0;
     myGM->setLoseFlag(false);
     myPlayer->initializeSpeed();
-    
+    gameMsg = 0;
+    countMsg = 0;
 
 }
 
@@ -101,6 +109,14 @@ void RunLogic(void)
     
     objPos tempFoodPos;
 
+    if (gameMsg)
+    {
+        countMsg++;
+    }
+    else
+    {
+        countMsg = 0;
+    }
 
     for (int n = 0; n < 5; n++)
     {
@@ -108,15 +124,19 @@ void RunLogic(void)
         if (temp.x == tempFoodPos.x && temp.y == tempFoodPos.y)
         {
             foodCollision = true;
+            
             if(tempFoodPos.symbol == '0') {
                 myGM->incrementScore(30); 
-                myPlayer->increasePlayerLength(3);
+                myPlayer->increasePlayerLength(0);
+                gameMsg = 1;
             } else if(tempFoodPos.symbol == '+') {
                 myGM->incrementScore(50); 
                 myPlayer->increasePlayerLength(5);
+                gameMsg = 2;
             } else {
                 myGM->incrementScore(10); 
                 myPlayer->increasePlayerLength(1);
+                gameMsg = 3;
             }
             myFood->generateFood();
             break;
@@ -185,25 +205,54 @@ void DrawScreen(void)
             }
 
         }
-        MacUILib_printf("\n");
-            
+        if (i == 5)
+        {
+            if(!myGM->getLoseFlagStatus() && gameMsg)
+            {
+                if (countMsg < msgTime)
+                {
+                    MacUILib_printf("   ");
+                    if (gameMsg == 1)
+                    {
+                        MacUILib_printf("+30 score! +0 length!");
+                    }
+                    else if (gameMsg == 2)
+                    {
+                        MacUILib_printf("+50 score! +5 length!");
+                    }
+                    else if (gameMsg == 3)
+                    {
+                        MacUILib_printf("+10 score! +1 length!");
+                    }
+                }
+                else
+                {
+                    gameMsg = 0;
+                }
+            }
+        }
+        MacUILib_printf("\n");   
     }
     //GAME MESSAGES
     if (myGM->getLoseFlagStatus() == true)
     {
-        MacUILib_printf("Self collision occurred! You lose.\nYour final score is: %d", myGM->getScore());
+        MacUILib_printf("Self collision occurred! You lose.\nYour final score is: %d\n", myGM->getScore());
+    
     }
     else
     {
         MacUILib_printf("Score: %d", myGM->getScore());
+        myPlayer->printSpeed();
+        MacUILib_printf("\nPress < or > to change Game Speed.\n");
+        MacUILib_printf("Press n to generate new food.\n");
     }
-    myPlayer->printSpeed();
-    MacUILib_printf("Press < or > to change Game Speed.\n");
+    /*
     MacUILib_printf("\n\n----------DEBUGGING INFO----------\n");
     MacUILib_printf("Board Size: <%d, %d>\n", myGM->getBoardSizeX(), myGM->getBoardSizeY());
     myPlayer->printPlayerPosHead();
     myPlayer->printDir();
     MacUILib_printf("\nFood Position: <%d, %d>\nFood Symbol: %c", tempFoodPos.x, tempFoodPos.y, tempFoodPos.symbol);
+    */
 }
 
 void LoopDelay(void)

@@ -24,21 +24,22 @@ void Food::generateFood()
     foodBucket->clear();
 
     int bufX, bufY, xRange, yRange,n=0;
-    //bool positionIsFree;
+    bool positionIsFree;
 
     //bool flag = false;
     xRange = mainGMRef->getBoardSizeX() - 3;
     yRange = mainGMRef->getBoardSizeY() - 3;
     objPosArrayList* playerPos = mainPlayer->getPlayerPos();
     objPos buf;
-    objPos temp;
+    objPos temp;;
+    bool flag = 0;
     //int size = foodBucket->getSize();
     while (n < 5)
     {
         bufX = (rand() % xRange) + 1;
         bufY = (rand() % yRange) + 1;
 
-        bool positionIsFree = true;
+        positionIsFree = true;
         for (int i = 0; i < playerPos->getSize(); i++)
         {
             playerPos->getElement(temp, i);
@@ -46,6 +47,37 @@ void Food::generateFood()
             {
                 positionIsFree = false; // Position collides with player's body
                 break;
+            }
+            /*else if ((bufX+1 == temp.x && bufY == temp.y) || (bufY+1 == temp.y && bufX == temp.x) || (bufX-1 == temp.x && bufY == temp.y) || (bufY-1 == temp.y && bufX == temp.x))
+            {
+                positionIsFree = false; // Position too close to player head
+                break;
+            }
+            else if ((bufX+2 == temp.x && temp.y == bufX) || (bufY+2 == temp.y && bufX == temp.x) || (bufX-2 == temp.x && bufY == temp.y) || (bufY-2 == temp.y && bufX == temp.x))
+            {
+                positionIsFree = false; // Position too close to player head
+                break;
+            }*/
+        }
+        for (int i = -3; i < 3; i++)
+        {
+            if ((bufX+i == temp.x && bufY == temp.y) || (bufY+i == temp.y && bufX == temp.x) || (bufX+i == temp.x && bufY+i == temp.y))
+            {
+                positionIsFree = false; // Position too close to player head
+                break;
+                flag = 1;
+            }
+        }
+        if (!flag)
+        {
+            for (int i = 0; i < 5; i++) // checks food bucket items to ensure no two items hold the same coordinates
+            {
+                foodBucket->getElement(temp, i);
+                if (bufX == temp.x && bufY == temp.y)
+                {
+                    positionIsFree = false;
+                    break;
+                }
             }
         }
 
@@ -55,7 +87,7 @@ void Food::generateFood()
             foodPos.y = bufY;
             
             // Randomly select food type with different probabilities
-            int randValue = rand() % 100; // Generate a random number between 0 and 99
+            //int randValue = rand() % 100; // Generate a random number between 0 and 99
             if (n < 3)
             {
                 buf.symbol = 'o';
