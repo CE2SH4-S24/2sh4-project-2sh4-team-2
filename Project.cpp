@@ -99,6 +99,8 @@ void RunLogic(void)
     tempPlayerPos->getHeadElement(temp);
     foodCollision = false;
     
+    objPos tempFoodPos;
+
 
     for (int n = 0; n < 5; n++)
     {
@@ -106,28 +108,19 @@ void RunLogic(void)
         if (temp.x == tempFoodPos.x && temp.y == tempFoodPos.y)
         {
             foodCollision = true;
+            if(tempFoodPos.symbol == '0') {
+                myGM->incrementScore(30); 
+                myPlayer->increasePlayerLength(3);
+            } else if(tempFoodPos.symbol == '+') {
+                myGM->incrementScore(50); 
+                myPlayer->increasePlayerLength(5);
+            } else {
+                myGM->incrementScore(10); 
+                myPlayer->increasePlayerLength(1);
+            }
+            myFood->generateFood();
             break;
-        }    
-    }
-    
-    
-    if (foodCollision)
-    {
-        if(tempFoodPos.symbol == '0') {
-            myGM->incrementScore(50); 
-            myPlayer->increasePlayerLength(0);
         }
-        else if(tempFoodPos.symbol == '+')
-        {
-            myGM->incrementScore(100); 
-            myPlayer->increasePlayerLength(3);
-        } 
-        else 
-        {
-            myGM->incrementScore(10); 
-            myPlayer->increasePlayerLength(1);
-        }
-        myGM->setRegenerate(true);
     }
     
     if (myPlayer->checkSelfCollision())

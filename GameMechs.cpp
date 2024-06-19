@@ -9,8 +9,8 @@ GameMechs::GameMechs()
     regenerate = false;
 
 // default board sizes
-    boardSizeX = 20;
-    boardSizeY = 10;
+    boardSizeX = 40;
+    boardSizeY = 35;
 }
 
 GameMechs::GameMechs(int boardX, int boardY)

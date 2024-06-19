@@ -12,6 +12,8 @@ class Food
 
         void generateFood();
         void getFoodPos(objPos &returnPos, int index);
+        objPosArrayList* getFoodList();
+
         
 
     private:

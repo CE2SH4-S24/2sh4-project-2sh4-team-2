@@ -37,7 +37,7 @@ class Player
         void printDir();
         void increasePlayerLength(int growth);
         bool checkSelfCollision();
-        //int checkFoodConsumption();
+        int checkFoodConsumption();
         void printPlayerPosHead();
         void printPlayerPosList();
         void initializeSpeed();

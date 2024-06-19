@@ -252,7 +252,8 @@ void Player::movePlayer()
         playPosList->removeTail();
     }
     else { //don't remove the tail, and reset helper flag
-        growthby = 0;
+        //growthby = 0;
+        growthby --;
     }   
 
 }   
@@ -296,7 +297,7 @@ void Player::printPlayerPosHead()
     MacUILib_printf("Snake Head Symbol: @\n");
 }
 
-/*int Player::checkFoodConsumption() 
+int Player::checkFoodConsumption() 
 {
     objPos playerPos;
     this->getPlayerPos()->getHeadElement(playerPos);
@@ -311,11 +312,14 @@ void Player::printPlayerPosHead()
             if (foodPos.getSymbol() == '0') {
                 return 3;
             } 
-            else 
+            else if (foodPos.getSymbol() == 'o')
             {
                 return 1;
+            }
+            else{
+                return 5;
             }
         }
         return 0;
     }
-}*/
+}
