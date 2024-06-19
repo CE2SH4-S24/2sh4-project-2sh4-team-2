@@ -10,7 +10,7 @@ class Food
         Food(Player* thisPlrRef, GameMechs* thisGMRef);
         ~Food();
 
-        void generateFood();
+        void generateFood(objPosArrayList& playerBody);
         void getFoodPos(objPos &returnPos);
 
     private:

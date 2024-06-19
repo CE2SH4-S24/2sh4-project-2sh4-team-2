@@ -1,10 +1,14 @@
 #include "Player.h"
 #include "MacUILib.h"
+#include "Food.h"
+#include <iostream>
 
  
 Player::Player(GameMechs* thisGMRef)
 {
     mainGameMechsRef = thisGMRef;
+    this->foodRef = foodRef;
+
     myDir = STOP;
     mainGameMechsRef->setRegenerate(false);
     // more actions to be included
@@ -290,4 +294,23 @@ void Player::printPlayerPosHead()
     playPosList->getElement(tempObjPos, 0);
     MacUILib_printf("Snake Head Position: <%d, %d>\n", tempObjPos.x, tempObjPos.y);
     MacUILib_printf("Snake Head Symbol: @\n");
+}
+
+int Player::checkFoodConsumption() 
+{
+    objPos playerPos;
+    this->getPlayerPos()->getHeadElement(playerPos);
+
+    objPos foodPos;
+    foodRef->getFoodPos(foodPos);
+
+    if (playerPos.x == foodPos.x && playerPos.y == foodPos.y) 
+    {
+        if (foodPos.getSymbol() == '0') {
+            return 3;
+        } else {
+            return 1;
+        }
+    }
+    return 0;
 }

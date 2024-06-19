@@ -4,6 +4,9 @@
 #include "GameMechs.h"
 #include "objPos.h"
 #include "objPosArrayList.h" 
+//#include "Food.h"
+
+class Food;
 
 class Player
 {
@@ -35,6 +38,7 @@ class Player
         //bool checkCollision() const;
         void increasePlayerLength(int growth);
         bool checkSelfCollision();
+        int checkFoodConsumption();
         void printPlayerPosHead();
         void printPlayerPosList();
         void initializeSpeed();
@@ -51,6 +55,7 @@ class Player
         int growthby;
         objPos tempObjPos;
 
+        Food* foodRef;
 
         // Need a reference to the Main Game Mechanisms
         GameMechs* mainGameMechsRef;

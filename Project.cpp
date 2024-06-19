@@ -63,7 +63,7 @@ void Initialize(void)
     myPlayer = new Player(myGM);
     myFood = new Food(myPlayer, myGM);
     border.setObjPos(0,0, '#'); //starting position and character symbol of border to be printed
-    myFood->generateFood(); //generates a random coordinate for food
+    myFood->generateFood(*(myPlayer->getPlayerPos())); //generates a random coordinate for food
     bool foodCollision = false; // initializes snake head collision with food to false
     myPlayer->increasePlayerLength(0); //initializes player length growth to 0;
     myGM->setLoseFlag(false);
@@ -87,7 +87,7 @@ void RunLogic(void)
 {
     if(myGM->getRegenerateStatus())
     {
-        myFood->generateFood();
+        myFood->generateFood(*(myPlayer->getPlayerPos()));
         myGM->setRegenerate(false);
         
     }
@@ -100,11 +100,18 @@ void RunLogic(void)
  
     tempPlayerPos->getHeadElement(temp);
     foodCollision = false;
+
+    
     if (temp.x == tempFoodPos.x && temp.y == tempFoodPos.y) {
-        myFood->generateFood();
         foodCollision = true;
-        myGM->incrementScore(10); 
-        myPlayer->increasePlayerLength(1);
+        if(tempFoodPos.symbol == 'O') {
+            myGM->incrementScore(30); 
+            myPlayer->increasePlayerLength(3);
+        } else{
+            myGM->incrementScore(10); 
+            myPlayer->increasePlayerLength(1);
+        }
+        myFood->generateFood(*(myPlayer->getPlayerPos()));
     }
     
     if (myPlayer->checkSelfCollision())
