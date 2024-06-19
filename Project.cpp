@@ -17,9 +17,9 @@ Food* myFood;
 objPos tempFoodPos; // holds one objPos value of food (food coordinates)
 objPosArrayList* tempPlayerPos;
 objPos temp; // holds one objPos index value of playerPosList (snake body coordinates)
-const int msgTime = 5; // number of screen refreshes before game messages disappear
-int countMsg;
-int gameMsg;
+//const int msgTime = 7; // number of screen refreshes before game messages disappear
+//int countMsg;
+//int gameMsg;
 
 
 //bool exitFlag;
@@ -66,7 +66,7 @@ void Initialize(void)
     // small board :20, 30 --> call with no parameters
     // medium 1: 24, 12 medium2: 26, 13, medium3: 28, 14
     //large1: 30,15, large2: 32, 16
-    myGM = new GameMechs(26, 13); 
+    myGM = new GameMechs(28, 14); 
     myPlayer = new Player(myGM);
     myFood = new Food(myPlayer, myGM);
     border.setObjPos(0,0, '#'); //starting position and character symbol of border to be printed
@@ -75,8 +75,8 @@ void Initialize(void)
     myPlayer->increasePlayerLength(0); //initializes player length growth to 0;
     myGM->setLoseFlag(false);
     myPlayer->initializeSpeed();
-    gameMsg = 0;
-    countMsg = 0;
+    //gameMsg = 0;
+    //countMsg = 0;
 
 }
 
@@ -109,13 +109,13 @@ void RunLogic(void)
     
     objPos tempFoodPos;
 
-    if (gameMsg)
+    if (myGM->getGameMsg())
     {
-        countMsg++;
+        myGM->addCountMsg();
     }
     else
     {
-        countMsg = 0;
+        myGM->resetCountMsg();
     }
 
     for (int n = 0; n < 5; n++)
@@ -128,15 +128,18 @@ void RunLogic(void)
             if(tempFoodPos.symbol == '0') {
                 myGM->incrementScore(30); 
                 myPlayer->increasePlayerLength(0);
-                gameMsg = 1;
+                myGM->setGameMsg(1);
+                myGM->resetCountMsg();
             } else if(tempFoodPos.symbol == '+') {
                 myGM->incrementScore(50); 
                 myPlayer->increasePlayerLength(5);
-                gameMsg = 2;
+                myGM->setGameMsg(2);
+                myGM->resetCountMsg();
             } else {
                 myGM->incrementScore(10); 
                 myPlayer->increasePlayerLength(1);
-                gameMsg = 3;
+                myGM->setGameMsg(3);
+                myGM->resetCountMsg();
             }
             myFood->generateFood();
             break;
@@ -207,29 +210,7 @@ void DrawScreen(void)
         }
         if (i == 5)
         {
-            if(!myGM->getLoseFlagStatus() && gameMsg)
-            {
-                if (countMsg < msgTime)
-                {
-                    MacUILib_printf("   ");
-                    if (gameMsg == 1)
-                    {
-                        MacUILib_printf("+30 score! +0 length!");
-                    }
-                    else if (gameMsg == 2)
-                    {
-                        MacUILib_printf("+50 score! +5 length!");
-                    }
-                    else if (gameMsg == 3)
-                    {
-                        MacUILib_printf("+10 score! +1 length!");
-                    }
-                }
-                else
-                {
-                    gameMsg = 0;
-                }
-            }
+            myGM->printSpecialMessages();
         }
         MacUILib_printf("\n");   
     }

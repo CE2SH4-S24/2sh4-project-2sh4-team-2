@@ -11,6 +11,10 @@ GameMechs::GameMechs()
 // default board sizes
     boardSizeX = 20;
     boardSizeY = 10;
+
+    //additional features
+    gameMsg = 0;
+    countMsg = 0;
 }
 
 GameMechs::GameMechs(int boardX, int boardY)
@@ -23,9 +27,13 @@ GameMechs::GameMechs(int boardX, int boardY)
 // custom board sizes
     boardSizeX = boardX;
     boardSizeY = boardY;
+
+    //additional features
+    gameMsg = 0;
+    countMsg = 0;
 }
 
-// do you need a destructor?
+// do you need a destructor? no
 /*
 GameMechs::~GameMechs()
 {
@@ -101,5 +109,61 @@ void GameMechs::setLoseFlag(bool value) {
     if (loseFlag)
     {
         exitFlag = true;
+    }
+}
+
+int GameMechs::getGameMsg()
+{
+    return gameMsg;
+}
+
+int GameMechs::getMsgTime()
+{
+    return msgTime;
+}
+
+int GameMechs::getCountMsg()
+{
+    return countMsg;
+}
+
+void GameMechs::addCountMsg()
+{
+    countMsg++;
+}
+
+void GameMechs::resetCountMsg()
+{
+    countMsg = 0;
+}
+void GameMechs::setGameMsg(int n)
+{
+    gameMsg = n;
+}
+
+void GameMechs::GameMechs::printSpecialMessages()
+{
+    if(!getLoseFlagStatus() && gameMsg)
+    {
+        if (countMsg < msgTime)
+        {
+            MacUILib_printf("   ");
+            if (gameMsg == 1)
+            {
+                MacUILib_printf("+%d score! +%d length!", 30, 0);
+            }
+            else if (gameMsg == 2)
+            {
+                MacUILib_printf("+%d score! +%d length!", 50, 5);
+            }
+            else if (gameMsg == 3)
+            {
+                MacUILib_printf("+%d score! +%d length!", 10, 1);
+            }
+        }
+        else
+        {
+            gameMsg = 0;
+        }
     }
 }

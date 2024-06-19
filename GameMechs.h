@@ -32,6 +32,11 @@ class GameMechs
 
         bool loseFlag;
 
+        // additional features - print dissapearing message
+        int gameMsg;
+        const int msgTime = 7;
+        int countMsg;
+
     public:
         GameMechs();
         GameMechs(int boardX, int boardY);
@@ -56,6 +61,16 @@ class GameMechs
 
         int getScore() const;  
         void incrementScore(int amount); 
+        //additional disappearing print message
+
+        int getGameMsg();
+        int getMsgTime();
+        int getCountMsg();
+
+        void addCountMsg();
+        void setGameMsg(int n);
+        void resetCountMsg();
+        void printSpecialMessages();
 
 };
 
