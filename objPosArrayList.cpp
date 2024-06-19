@@ -32,14 +32,14 @@ void objPosArrayList::removeHead() {
         for (int i = 0; i < sizeList - 1; i++) {
             aList[i] = aList[i + 1];
         }
-        --sizeList;
+        sizeList--;
     }
 }
 
 void objPosArrayList::insertTail(objPos thisPos) {
     if (sizeList < ARRAY_MAX_CAP) {
         aList[sizeList] = thisPos;
-        ++sizeList;
+        sizeList++;
     }
 }
 

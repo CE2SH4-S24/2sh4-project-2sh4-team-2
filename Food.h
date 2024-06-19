@@ -10,12 +10,13 @@ class Food
         Food(Player* thisPlrRef, GameMechs* thisGMRef);
         ~Food();
 
-        void generateFood(objPosArrayList& playerBody);
-        void getFoodPos(objPos &returnPos);
+        void generateFood();
+        void getFoodPos(objPos &returnPos, int index);
+        
 
     private:
         objPos foodPos;
-        //objPosArrayList foodBucket;// this is for above and beyond
+        objPosArrayList* foodBucket;// this is for above and beyond
 
         // Need a reference to the Main Game Mechanisms
         GameMechs* mainGMRef;

@@ -296,21 +296,26 @@ void Player::printPlayerPosHead()
     MacUILib_printf("Snake Head Symbol: @\n");
 }
 
-int Player::checkFoodConsumption() 
+/*int Player::checkFoodConsumption() 
 {
     objPos playerPos;
     this->getPlayerPos()->getHeadElement(playerPos);
 
     objPos foodPos;
-    foodRef->getFoodPos(foodPos);
-
-    if (playerPos.x == foodPos.x && playerPos.y == foodPos.y) 
+    for (int n = 0; n < 5; n++)
     {
-        if (foodPos.getSymbol() == '0') {
-            return 3;
-        } else {
-            return 1;
+        foodRef->getFoodPos(foodPos, n);
+
+        if (playerPos.x == foodPos.x && playerPos.y == foodPos.y) 
+        {
+            if (foodPos.getSymbol() == '0') {
+                return 3;
+            } 
+            else 
+            {
+                return 1;
+            }
         }
+        return 0;
     }
-    return 0;
-}
+}*/

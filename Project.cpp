@@ -63,7 +63,7 @@ void Initialize(void)
     myPlayer = new Player(myGM);
     myFood = new Food(myPlayer, myGM);
     border.setObjPos(0,0, '#'); //starting position and character symbol of border to be printed
-    myFood->generateFood(*(myPlayer->getPlayerPos())); //generates a random coordinate for food
+    myFood->generateFood(); //generates a random coordinate for food
     bool foodCollision = false; // initializes snake head collision with food to false
     myPlayer->increasePlayerLength(0); //initializes player length growth to 0;
     myGM->setLoseFlag(false);
@@ -87,43 +87,58 @@ void RunLogic(void)
 {
     if(myGM->getRegenerateStatus())
     {
-        myFood->generateFood(*(myPlayer->getPlayerPos()));
+        myFood->generateFood();
         myGM->setRegenerate(false);
         
     }
-    myFood->getFoodPos(tempFoodPos);
     myPlayer->updatePlayerDir();
     myPlayer->movePlayer();
-    //myPlayer->getPlayerPos(tempPlayerPos);
+    
     tempPlayerPos = myPlayer->getPlayerPos();
-
  
     tempPlayerPos->getHeadElement(temp);
     foodCollision = false;
-
     
-    if (temp.x == tempFoodPos.x && temp.y == tempFoodPos.y) {
-        foodCollision = true;
-        if(tempFoodPos.symbol == 'O') {
-            myGM->incrementScore(30); 
+
+    for (int n = 0; n < 5; n++)
+    {
+        myFood->getFoodPos(tempFoodPos, n);
+        if (temp.x == tempFoodPos.x && temp.y == tempFoodPos.y)
+        {
+            foodCollision = true;
+            break;
+        }    
+    }
+    
+    
+    if (foodCollision)
+    {
+        if(tempFoodPos.symbol == '0') {
+            myGM->incrementScore(50); 
+            myPlayer->increasePlayerLength(0);
+        }
+        else if(tempFoodPos.symbol == '+')
+        {
+            myGM->incrementScore(100); 
             myPlayer->increasePlayerLength(3);
-        } else{
+        } 
+        else 
+        {
             myGM->incrementScore(10); 
             myPlayer->increasePlayerLength(1);
         }
-        myFood->generateFood(*(myPlayer->getPlayerPos()));
+        myGM->setRegenerate(true);
     }
     
     if (myPlayer->checkSelfCollision())
     {
-       myGM->setLoseFlag(true);
-    //    
+       myGM->setLoseFlag(true);   
     }
 }
 
 void DrawScreen(void)
 {
-    int k = 0;
+    int k = 0, t = 0;
     
     MacUILib_clearScreen();
     for (int i = 0; i < myGM->getBoardSizeY(); i++)
@@ -140,7 +155,6 @@ void DrawScreen(void)
                     if (p == 0)
                     {
                         MacUILib_printf("@");                        
-                        
                     }
                     else
                     {
@@ -148,26 +162,33 @@ void DrawScreen(void)
                     }
                     k = 1;
                     break;
-                    
+                }
+            }
+    //          If at food item position, print food symbol
+            for (int n = 0; n < 5; n++)
+            {
+                t = 0;
+                myFood->getFoodPos(tempFoodPos, n);
+                if (!foodCollision && i == (tempFoodPos.y) && j == (tempFoodPos.x))
+                {
+                    MacUILib_printf("%c", tempFoodPos.symbol);
+                    t = 1;
+                    break;
                 }
             }
             if (i == 0 || i == (myGM->getBoardSizeY() - 1) || j == 0 || j == (myGM->getBoardSizeX() - 1))
             {
                 MacUILib_printf("%c", border.getSymbol());
             }
-    //          If at food item position, print food symbol
-            else if(!foodCollision && i == (tempFoodPos.y) && j == (tempFoodPos.x))
-            {
-                MacUILib_printf("%c", tempFoodPos.symbol);
-            }
     //          Otherwise, print the space character
-            else if (k == 0)
+            else if (k == 0 && t == 0)
             {
                 MacUILib_printf(" ");
             }
             else
             {
                 k = 0;
+                t = 0;
             }
 
         }
