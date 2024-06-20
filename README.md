@@ -13,14 +13,6 @@ Group Member 1 Information:
 
 Name: [Chen, Yucheng]
 
-MacID: [cheny883]
-
-Student No.: [400478105]
-
 Group Member 2 Information:
 
 Name: Saifuddin, Suemayya
-
-MacID: saifuds
-
-Student No.: 400398701 
