@@ -10,6 +10,7 @@ Food::Food()
     foodBucket = new objPosArrayList();
     //Seed the random integer generation function with current time.
     srand(time(NULL));
+    foodCollision = false;
 
 }
 
@@ -25,7 +26,6 @@ void Food::generateFood(objPosArrayList* blockoff)
     int bufX, bufY, xRange, yRange,n=0;
     bool positionIsFree;
 
-    //bool flag = false;
     xRange = boardX - 3;
     yRange = boardY - 3;
 
@@ -70,13 +70,11 @@ void Food::generateFood(objPosArrayList* blockoff)
             }
         }
 
-        if (positionIsFree) //if random coordinates generated pass all above tests, insert them in one objPos package in the foodBucket 
+        if (positionIsFree) //if random coordinates generated pass all above tests, insert them as 1 objPos item in the foodBucket 
         {
             foodPos.x = bufX;
             foodPos.y = bufY;
             
-            // Randomly select food type with different probabilities
-            //int randValue = rand() % 100; // Generate a random number between 0 and 99
             if (n < 3) // for 3/5 food items, symbol is 'o'
             {
                 buf.symbol = 'o';
@@ -123,5 +121,15 @@ void Food::getBoardSize(GameMechs* gamemechs)
 {
     boardX = gamemechs->getBoardSizeX();
     boardY = gamemechs->getBoardSizeY();
+}
+
+bool Food::getFoodCollision()
+{
+    return foodCollision;
+}
+
+void Food::setFoodCollision(bool boolean)
+{
+    foodCollision = boolean;
 }
 

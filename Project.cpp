@@ -5,27 +5,18 @@
 #include "Player.h"
 #include "Food.h"
 
-
 using namespace std;
-
 #define DELAY_CONST 100000
 
-//objPos myPos;
-Player* myPlayer;
+Player* myPlayer; 
 objPos border;
 Food* myFood;
 objPos tempFoodPos; // holds one objPos value of food (food coordinates)
 objPosArrayList* tempPlayerPos;
 objPos temp; // holds one objPos index value of playerPosList (snake body coordinates)
-//const int msgTime = 7; // number of screen refreshes before game messages disappear
-//int countMsg;
-//int gameMsg;
-
-
-//bool exitFlag;
 GameMechs* myGM;
 
-bool foodCollision;
+
 //Function Declarations
 
 void Initialize(void);
@@ -35,8 +26,6 @@ void DrawScreen(void);
 void LoopDelay(void);
 void CleanUp(void);
 
-
-//WIP Functions 
 
 
 int main(void)
@@ -57,6 +46,8 @@ int main(void)
 }
 
 
+//Function Definitions
+
 void Initialize(void)
 {
     MacUILib_init();
@@ -65,17 +56,17 @@ void Initialize(void)
     myGM = new GameMechs(28, 14); 
     myPlayer = new Player(myGM);
     myFood = new Food(); 
+    
     border.setObjPos(0,0, '#'); //starting position and character symbol of border to be printed
     tempPlayerPos = myPlayer->getPlayerPos();
     myFood->getBoardSize(myGM);
     myFood->generateFood(tempPlayerPos); //generates a random coordinate for food
-    bool foodCollision = false; // initializes snake head collision with food to false
+    //myFood->setFoodCollision(false);// initializes snake head collision with food to false
     myPlayer->increasePlayerLength(0); //initializes player length growth to 0;
     myGM->setLoseFlag(false);
     myPlayer->initializeSpeed(); 
-
-
 }
+
 
 void GetInput(void)
 {
@@ -84,25 +75,23 @@ void GetInput(void)
         char input = MacUILib_getChar();
         myGM->setInput(input);
     }
-
-     
 }
 
 void RunLogic(void)
 {
-    if(myGM->getRegenerateStatus()) //checks for call to generate food
+    if(myGM->getRegenerateStatus()) //checks for call to generate food, if true, generate food
     {
         myFood->generateFood(tempPlayerPos);
         myGM->setRegenerate(false);
-        
     }
-    myPlayer->updatePlayerDir();
+
+    myPlayer->updatePlayerDir(); 
     myPlayer->movePlayer();
     
     tempPlayerPos = myPlayer->getPlayerPos();
  
-    tempPlayerPos->getHeadElement(temp);
-    foodCollision = false;
+    tempPlayerPos->getHeadElement(temp); //store objPos element head of snake in temp
+    myFood->setFoodCollision(false); // re-initialize foodCollisison to false every run, not just in Initialize()
     
     objPos tempFoodPos;
 
@@ -120,9 +109,9 @@ void RunLogic(void)
         myFood->getFoodPos(tempFoodPos, n);
         if (temp.x == tempFoodPos.x && temp.y == tempFoodPos.y)
         {
-            foodCollision = true;
+            myFood->setFoodCollision(true);
             
-            if(tempFoodPos.symbol == '0') 
+            if(tempFoodPos.symbol == '0') //depending on food symbol collided with, outcome changes
             {
                 myGM->incrementScore(30); //self explanatory, increases score by 30
                 myPlayer->increasePlayerLength(0);
@@ -143,7 +132,8 @@ void RunLogic(void)
                 myGM->setGameMsg(3); // special game message: "+10 score! +1 length!"
                 myGM->resetCountMsg(); 
             }
-            myFood->generateFood(tempPlayerPos);
+            //myFood->generateFood(tempPlayerPos);
+            myGM->setRegenerate(true);
             break;
         }
     }
@@ -187,7 +177,7 @@ void DrawScreen(void)
             {
                 t = 0;
                 myFood->getFoodPos(tempFoodPos, n);
-                if (!foodCollision && i == (tempFoodPos.y) && j == (tempFoodPos.x))
+                if (!(myFood->getFoodCollision()) && i == (tempFoodPos.y) && j == (tempFoodPos.x))
                 {
                     MacUILib_printf("%c", tempFoodPos.symbol);
                     t = 1;
@@ -247,8 +237,9 @@ void LoopDelay(void)
 
 void CleanUp(void)
 {
-    //MacUILib_clearScreen();
-    delete myPlayer;
+    //MacUILib_clearScreen(); //commented out on purpose, shows game at point when player dies
+    //deallocate space on heap
+    delete myPlayer; 
     delete myGM;  
     delete myFood;  
   
